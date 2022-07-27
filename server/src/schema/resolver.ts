@@ -1,6 +1,14 @@
 import {UserList, MovieList} from "../FakeData"
 import _ from "lodash"
 
+/*  _parent -> fetch the prev level 
+            e.g. check Query favorite movies for reference
+    args -> the arguments the user pass in 
+    context -> variables any resolvers can use
+            e.g. check Query Users and index.ts for reference
+    info -> infomation about the graphql request
+            e.g. check query movies for reference 
+*/
 interface Movie {
     id: number;
     name: string;
@@ -30,16 +38,18 @@ export const resolvers = {
 //Query resolvers
     Query: {
     //User Resolvers
-        users:() => {
+        users:(_parent: any, _args: UserType, context: any) => {
+            console.log(context)
             return UserList
         },
-        user: (_parent: any, args: { id: number} ) => {
+        user: (_parent: any, args: { id: number}) => {
             const inputId = args.id;
             const user = _.find(UserList, { id: Number(inputId) });
             return user
-        },
+        }, 
     //Movie Resolvers
-        movies: () => {
+        movies: (_parent: any, _args: any, _context: any, info: any) => {
+            console.log(info)
             return MovieList
         },
 
@@ -52,7 +62,8 @@ export const resolvers = {
 
 //Type Resolvers
     User: {
-        favoriteMovies: () => {
+        favoriteMovies: (_parent: any) => {
+            console.log(_parent)
             return _.filter(MovieList, (movie) => movie.yearOfPublication>=2000 && movie.yearOfPublication <=2010)
         }
     },

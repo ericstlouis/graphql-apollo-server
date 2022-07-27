@@ -8,7 +8,8 @@ const FakeData_1 = require("../FakeData");
 const lodash_1 = __importDefault(require("lodash"));
 exports.resolvers = {
     Query: {
-        users: () => {
+        users: (_parent, _args, context) => {
+            console.log(context);
             return FakeData_1.UserList;
         },
         user: (_parent, args) => {
@@ -16,7 +17,8 @@ exports.resolvers = {
             const user = lodash_1.default.find(FakeData_1.UserList, { id: Number(inputId) });
             return user;
         },
-        movies: () => {
+        movies: (_parent, _args, _context, info) => {
+            console.log(info);
             return FakeData_1.MovieList;
         },
         movie: (_parent, args) => {
@@ -26,7 +28,8 @@ exports.resolvers = {
         },
     },
     User: {
-        favoriteMovies: () => {
+        favoriteMovies: (_parent) => {
+            console.log(_parent);
             return lodash_1.default.filter(FakeData_1.MovieList, (movie) => movie.yearOfPublication >= 2000 && movie.yearOfPublication <= 2010);
         }
     },
